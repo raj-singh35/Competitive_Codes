@@ -1,0 +1,16 @@
+// Graph dfs
+void dfs(vector<ll> graph[] , ll source){
+    vis[source] = true;
+    for(auto child : graph[source]){
+        if(vis[child]) continue;
+        dfs(graph , child);
+    }
+}
+
+// Tree dfs
+void dfs(vector<ll> graph[] , ll source , ll parent){
+    for(auto child : graph[source]){
+        if(child == parent) continue;
+        dfs(graph , child , source);
+    }
+}
