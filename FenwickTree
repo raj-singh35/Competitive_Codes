@@ -1,0 +1,25 @@
+class Fenwick{
+public:
+    vector<ll> fen;
+    Fenwick(ll n){
+        fen.resize(n + 10 , 0);
+    }
+public:
+    void update(ll ind, ll val){
+	     for(ll i = ind + 1 ; i<= fen.size() ; i+= (i & -i)){
+	         fen[i] += val;
+	     }
+    }
+public:
+    ll getSum(ll ind){
+	  ll ans = 0; 
+	  for(int i = ind ; i > 0 ; i-= (i & -i)) ans += fen[i]; 
+      return ans; 
+    }
+public :
+   ll query(ll l , ll r){
+       ll x = getSum(r + 1);
+       ll y = getSum(l);
+       return x - y;
+   }
+};
