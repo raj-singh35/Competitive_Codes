@@ -1,0 +1,31 @@
+class DSU {
+    public:
+    vector < ll > parent, sz;
+    DSU(int n) {
+        parent.resize(n);
+        sz.resize(n);
+    }
+
+    public:
+        void make(ll n) {
+            for (ll i = 1; i <= n; i++) {
+                parent[i] = i;
+                sz[i] = 1;
+            }
+        }
+
+    public:
+        ll find(ll u) {
+            if (u == parent[u]) return u;
+            return parent[u] = find(parent[u]);
+        }
+    public:
+    void Union(ll u, ll v) {
+        ll a = find(u), b = find(v);
+        if (a != b) {
+            if (a < b) swap(a, b);
+            parent[b] = a;
+            sz[a] += sz[b];
+        }
+    }
+};
