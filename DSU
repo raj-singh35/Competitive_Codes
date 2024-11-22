@@ -1,7 +1,7 @@
 class DSU {
     public:
     vector < ll > parent, sz;
-    DSU(int n) {
+    DSU(ll n) {
         parent.resize(n + 1);
         sz.resize(n + 1);
     }
@@ -23,7 +23,7 @@ class DSU {
     void Union(ll u, ll v) {
         ll a = find(u), b = find(v);
         if (a != b) {
-            if (a < b) swap(a, b);
+            if (sz[a] < sz[b]) swap(a, b);
             parent[b] = a;
             sz[a] += sz[b];
         }
