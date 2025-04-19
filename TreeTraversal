@@ -1,0 +1,87 @@
+const ll N = 2e5 + 10;
+ll parent[25][N];
+class Tree{
+public :
+    vector<ll> dist;
+    Tree(ll n){
+        dist.resize(n + 1 , 0);
+    }
+    
+    void dfs(vector<ll> graph[] , ll source , ll par){
+        parent[0][source] = par;
+        for(ll i = 1 ; i < 25 ; i++){
+            parent[i][source] = parent[i - 1][parent[i - 1][source]];
+        }
+        
+        for(auto child : graph[source]){
+            if(child == par) continue;
+            dist[child] = dist[source] + 1;
+            dfs(graph , child , source);
+        }
+    }
+    
+    void bfs(vector<ll> graph[] , ll source , ll n){
+        bool vis[n + 1] = {};
+        queue<ll> q;
+        q.push(source);
+        dist[source] = 0;
+        vis[source] = 1;
+        while(!q.empty()){
+            auto it = q.front();
+            q.pop();
+            for(auto child : graph[it]){
+                if(vis[child]) continue;
+                q.push(child);
+                vis[child] = 1;
+                dist[child] = dist[it] + 1;
+            }
+        }
+    }
+    
+    // Updates dist and parent array...
+    void make(vector<ll> graph[]){
+        dfs(graph , 1 , -1);
+    }
+    
+    // LCA of two nodes...
+    ll lca(ll a , ll b){
+        if(dist[a] < dist[b]) swap(a, b);
+        for(ll i = 24 ; i >= 0 ; i--){
+            if(dist[a] - (1LL << i) >= dist[b]) a = parent[i][a];
+        }
+        
+        for(ll i = 24 ; i >= 0 ; --i){
+            if(parent[i][a] != parent[i][b]){
+                a = parent[i][a];
+                b = parent[i][b];
+            }
+        }
+        
+        if(a != b) a = parent[0][a];
+        
+        return a;
+    }
+    
+    // Return {diameter , node , second_node}
+    vector<ll> diameter(vector<ll> graph[] , ll n){
+        ll node = 1;
+        bfs(graph , node , n);
+        ll mx = 0 , second_node = 1;
+        for(ll i = 1 ; i <= n ; i++){
+            if(dist[i] > mx){
+                mx = dist[i];
+                second_node = i;
+            }
+        }
+        bfs(graph , second_node , n);
+        mx = 0 , node = second_node;
+        for(ll i = 1 ; i <= n ; i++){
+            if(dist[i] > mx){
+                mx = dist[i];
+                second_node = i;
+            }
+        }
+        
+        return {mx , node , second_node};
+    }   
+};
