@@ -1,40 +1,40 @@
 class Prefix{
 public :
-    vector<ll> pre;
-    vector<vector<ll>> pre2;
-    Prefix(ll n){
+    vector<int> pre;
+    vector<vector<int>> pre2;
+    Prefix(int n){
         pre.resize(n + 5 , 0);
     }
-    Prefix(ll n , ll m){
-        pre2.resize(n + 3 , vector<ll> (m + 3 , 0));
+    Prefix(int n , int m){
+        pre2.resize(n + 3 , vector<int> (m + 3 , 0));
     }
 
 public :
-    void make(vector<ll> &arr){
-        ll n = arr.size();
-        for(ll i = 0 ; i < n ; i++){
+    void make(vector<int> &arr){
+        int n = arr.size();
+        for(int i = 0 ; i < n ; i++){
            pre[i] = arr[i];
            if(i) pre[i] = pre[i - 1] + pre[i];
         }
     }
 public :
-    void make(vector<vector<ll>> &arr){
-        ll n = arr.size() , m = arr[0].size();
-        for(ll i = 1 ; i < n ; i++){
-          for(ll j = 1 ; j < m ; j++){
+    void make(vector<vector<int>> &arr){
+        int n = arr.size() , m = arr[0].size();
+        for(int i = 1 ; i < n ; i++){
+          for(int j = 1 ; j < m ; j++){
               pre2[i][j] = arr[i][j] + pre2[i - 1][j] + pre2[i][j - 1] - pre2[i - 1][j - 1];
           }
         }
     }
 
 public :
-    ll query(ll l , ll r){
-        ll total = pre[r];
+    int query(int l , int r){
+        int total = pre[r];
         if(l) total -= pre[l - 1];
         return total;
     }
-    ll query(ll a , ll b , ll c , ll d){
-        ll total = pre2[c][d] - pre2[a - 1][d] - pre2[c][b - 1] + pre2[a - 1][b - 1];
+    int query(int a , int b , int c , int d){
+        int total = pre2[c][d] - pre2[a - 1][d] - pre2[c][b - 1] + pre2[a - 1][b - 1];
         return total;
     }
 };
