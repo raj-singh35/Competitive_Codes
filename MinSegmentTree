@@ -1,58 +1,58 @@
 class SegmentTree{
 public : 
-    vector<ll> seg;
-    ll sz;
-    SegmentTree(ll n){
+    vector<int> seg;
+    int sz;
+    SegmentTree(int n){
         sz = n;
         seg.resize(4 * n + 5 , LLONG_MAX);
     }
     
-    ll merge(ll a , ll b){
+    int merge(int a , int b){
         return min(a , b);
     }
-    void build(ll ind , ll low , ll high , vector<ll> &arr){
+    void build(int ind , int low , int high , vector<int> &arr){
         if(low == high){
             seg[ind] = arr[low];
             return ;
         }
-        ll mid = (low + high) / 2;
+        int mid = (low + high) / 2;
         build(2 * ind + 1 , low , mid , arr);
         build(2 * ind + 2 , mid + 1 , high , arr);
         seg[ind] = merge(seg[2 * ind + 1] , seg[2 * ind + 2]);
     }
     
-    void getUpdated(ll ind , ll low , ll high , ll index , ll val){
+    void getUpdated(int ind , int low , int high , int index , int val){
         if(low == high){
             seg[ind] = val;
             return ;
         }
-        ll mid = low + (high - low) / 2;
+        int mid = low + (high - low) / 2;
         if(index <= mid) getUpdated(2 * ind + 1 , low , mid , index , val);
         else getUpdated(2 * ind + 2 , mid + 1 , high , index , val);
         
         seg[ind] = merge(seg[2 * ind + 1] , seg[2 * ind + 2]);
     }
     
-    ll getVal(ll ind , ll low , ll high , ll l , ll r){
+    int getVal(int ind , int low , int high , int l , int r){
         if(high < l || r < low) return LLONG_MAX;
         if(low >= l && high <= r) return seg[ind];
         
-        ll mid = (high + low) / 2;
-        ll left = getVal(2 * ind + 1 , low , mid , l , r);
-        ll right = getVal(2 * ind + 2 , mid + 1 , high , l , r);
+        int mid = (high + low) / 2;
+        int left = getVal(2 * ind + 1 , low , mid , l , r);
+        int right = getVal(2 * ind + 2 , mid + 1 , high , l , r);
         return merge(left , right);
     }
     
-    ll query(ll l , ll r){
+    int query(int l , int r){
         return getVal(0 , 0 , sz - 1 , l , r);
     }
     
-    void make(vector<ll> &arr){
-        ll n = arr.size();
+    void make(vector<int> &arr){
+        int n = arr.size();
         build(0 , 0 , n - 1 , arr);
     }
-    void update(ll ind , ll val){
-        ll n = seg.size();
+    void update(int ind , int val){
+        int n = seg.size();
         getUpdated(0 , 0 , sz - 1 , ind , val);
     }
     
