@@ -1,27 +1,27 @@
 class DSU {
     public:
-    vector < ll > parent, sz;
-    DSU(ll n) {
+    vector < int > parent, sz;
+    DSU(int n) {
         parent.resize(n + 1);
         sz.resize(n + 1);
     }
 
     public:
-        void make(ll n) {
-            for (ll i = 1; i <= n; i++) {
+        void make(int n) {
+            for (int i = 1; i <= n; i++) {
                 parent[i] = i;
                 sz[i] = 1;
             }
         }
 
     public:
-        ll find(ll u) {
+        int find(int u) {
             if (u == parent[u]) return u;
             return parent[u] = find(parent[u]);
         }
     public:
-    void Union(ll u, ll v) {
-        ll a = find(u), b = find(v);
+    void Union(int u, int v) {
+        int a = find(u), b = find(v);
         if (a != b) {
             if (sz[a] < sz[b]) swap(a, b);
             parent[b] = a;
