@@ -1,27 +1,30 @@
 class Fenwick{
 public:
     // 1 - based indexing...
-    vector<ll> fen;
-    Fenwick(ll n){
+    vector<int> fen;
+    Fenwick(int n){
         fen.resize(n + 10 , 0);
     }
+
 public:
-    void update(ll ind , ll val){
-	     for(ll i = ind ; i<= fen.size() ; i += (i & -i)){
+    void update(int ind , int val){
+	     for(int i = ind ; i<= fen.size() ; i += (i & -i)){
 	         fen[i] += val;
 	     }
     }
+
 public:
-    ll getSum(ll ind){
-	    ll ans = 0; 
+    int getSum(int ind){
+	    int ans = 0; 
 	    for(int i = ind ; i > 0 ; i-= (i & -i)) ans += fen[i]; 
         return ans; 
     }
+
 public :
-   // Use 1 - based indexing...
-   ll query(ll l , ll r){
-       ll x = getSum(r);
-       ll y = getSum(l - 1);
+    // Use 1 - based indexing...
+    int query(int l , int r){
+       int x = getSum(r);
+       int y = getSum(l - 1);
        return x - y;
    }
 };
