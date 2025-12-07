@@ -1,0 +1,61 @@
+class LCA {
+public: 
+    vector<vector<int>> dp;
+    vector<int> dist , parent;
+    
+    LCA(int n) {
+        dp.resize(n + 1, vector < int > (32, -1));
+        dist.resize(n + 1, 0);
+        parent.resize(n + 1, -1);
+    }
+ 
+    void dfs(vector < int > graph[], int source, int par) {
+        parent[source] = par;
+        for (auto child: graph[source]) {
+            if (child == par) continue;
+            dist[child] = dist[source] + 1;
+            dfs(graph, child, source);
+        }
+    }
+ 
+    void make(vector < int > graph[], int n) {
+        dfs(graph, 1, -1);
+        for (int i = 1; i <= n; i++) dp[i][0] = parent[i];
+ 
+        for (int i = 1; i < 32; i++) {
+            for (int j = 1; j <= n; j++) {
+                int prev_par = dp[j][i - 1];
+                if (prev_par == -1) continue;
+                dp[j][i] = dp[prev_par][i - 1];
+            }
+        }
+        return;
+    }
+ 
+    int kthParent(int node, int k) {
+        for (int i = 31; i >= 0; i--) {
+            if (k & (1LL << i)) {
+                if (node != -1) node = dp[node][i];
+            }
+        }
+        return node;
+    }
+    
+    int lca(int a , int b) {
+        if(dist[a] < dist[b]) swap(a, b);
+        for(int i = 31 ; i >= 0 ; i--){
+            if(dist[a] - (1LL << i) >= dist[b]) a = dp[a][i];
+        }
+ 
+        for(int i = 31 ; i >= 0 ; --i){
+            if(dp[a][i] != dp[b][i]){
+                a = dp[a][i];
+                b = dp[b][i];
+            }
+        }
+ 
+        if(a != b) a = dp[a][0];
+ 
+        return a;
+    }
+};
