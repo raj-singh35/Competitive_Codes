@@ -5,3 +5,9 @@ using namespace __gnu_pbds;
 
 // Ordered_Set
 #define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update>
+
+// Ordered_Multiset
+#define ordered_set tree<int, null_type,less_equal<int>, rb_tree_tag,tree_order_statistics_node_update>
+
+// Erasing an element in ordered multiset
+s.erase(s.upper_bound(value))
