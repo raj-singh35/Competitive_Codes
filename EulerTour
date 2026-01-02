@@ -1,0 +1,27 @@
+class EulerTour{
+public :
+    vector<int> start , end;
+    int timer;
+    EulerTour(int n){
+       start.resize(n + 1 , -1);
+       end.resize(n + 1 , -1);
+       timer = 0;
+    }
+    
+    void dfs(vector<int> graph[] , int source , int par){
+        start[source] = timer++;
+        for(auto &child : graph[source]){
+            if(child == par) continue;
+            dfs(graph , child , source);
+        }
+        end[source] = timer;
+    }
+    
+    void make(vector<int> graph[] , int source){
+        dfs(graph , source , -1);
+    }
+    
+    pair<int , int> getRange(int source){
+        return {start[source] , end[source] - 1};
+    }
+};
